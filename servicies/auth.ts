@@ -1,5 +1,5 @@
 import { load } from 'cheerio'
-import { isArray } from 'lodash-es'
+import { isArray } from 'lodash'
 import { router } from 'react-query-kit'
 
 import { deletedNamesAtom } from '@/jotai/deletedNamesAtom'

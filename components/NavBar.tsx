@@ -1,6 +1,6 @@
 import { StatusBarStyle } from 'expo-status-bar'
 import { useAtomValue } from 'jotai'
-import { isArray } from 'lodash-es'
+import { isArray } from 'lodash'
 import { ReactNode, isValidElement } from 'react'
 import { Platform, PressableProps, Text, View, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'

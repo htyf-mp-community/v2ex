@@ -1,5 +1,5 @@
 import { load } from 'cheerio'
-import { isObjectLike } from 'lodash-es'
+import { isObjectLike } from 'lodash'
 import { useContext, useMemo } from 'react'
 import { Pressable } from 'react-native'
 import { CustomBlockRenderer } from 'react-native-render-html'

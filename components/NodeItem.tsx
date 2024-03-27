@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { compact } from 'lodash-es'
+import { compact } from 'lodash'
 import { memo } from 'react'
 import { Text, TouchableOpacity } from 'react-native'
 

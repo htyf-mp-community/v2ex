@@ -1,5 +1,5 @@
 import { transparentize } from 'color2k'
-import { BlurView, BlurViewProps } from 'expo-blur'
+// import { BlurView, BlurViewProps } from 'expo-blur'
 import { useAtomValue } from 'jotai'
 import { Platform, View } from 'react-native'
 
@@ -29,7 +29,7 @@ export const supportsBlurviewColors = [
   themeColorsMap.cupcake.base100,
 ]
 
-export default function StyledBlurView(props: BlurViewProps) {
+export default function StyledBlurView(props) {
   const colorScheme = useAtomValue(colorSchemeAtom)
   const { colors } = useAtomValue(uiAtom)
 
@@ -38,7 +38,7 @@ export default function StyledBlurView(props: BlurViewProps) {
     supportsBlurviewColors.includes(colors.base100)
   ) {
     return (
-      <BlurView
+      <View
         {...props}
         tint={colorScheme}
         style={tw.style(

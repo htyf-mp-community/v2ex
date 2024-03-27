@@ -1,4 +1,4 @@
-import { debounce } from 'lodash-es'
+import { debounce } from 'lodash'
 import { forwardRef, useRef } from 'react'
 import { Pressable } from 'react-native'
 

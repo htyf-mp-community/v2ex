@@ -1,6 +1,7 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 import { useAtom, useAtomValue } from 'jotai'
-import { findIndex, isEmpty, some } from 'lodash-es'
+import { findIndex, isEmpty, some } from 'lodash'
 import { useMemo, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 import { DragSortableView } from 'react-native-drag-sort'

@@ -1,6 +1,6 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { useAtomValue } from 'jotai'
-import { find, findIndex, isEmpty, last, uniqBy } from 'lodash-es'
+import { find, findIndex, isEmpty, last, uniqBy } from 'lodash'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
   FlatList,

@@ -1,6 +1,6 @@
 import { load } from 'cheerio'
 import dayjs from 'dayjs'
-import { isArray, isEqual, isString, noop, pick } from 'lodash-es'
+import { isArray, isEqual, isString, noop, pick } from 'lodash'
 import { router } from 'react-query-kit'
 
 import { removeUnnecessaryPages } from '@/utils/query'

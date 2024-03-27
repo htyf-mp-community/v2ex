@@ -1,11 +1,10 @@
-import {
-  Feather,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  SimpleLineIcons,
-} from '@expo/vector-icons'
+import Feather from 'react-native-vector-icons/Feather'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+
 import { useAtom, useAtomValue } from 'jotai'
-import { compact, omit, pick } from 'lodash-es'
+import { compact, omit, pick } from 'lodash'
 import { memo } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

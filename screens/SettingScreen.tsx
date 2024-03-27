@@ -1,11 +1,10 @@
-import {
-  Feather,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  Octicons,
-} from '@expo/vector-icons'
-import { Image } from 'expo-image'
+import Feather from 'react-native-vector-icons/Feather'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Octicons from 'react-native-vector-icons/Octicons'
+
+// import { Image } from 'expo-image'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { RESET } from 'jotai/utils'
 import { Fragment } from 'react'
@@ -309,8 +308,8 @@ function SettingScreen() {
             try {
               await confirm(`确认清除缓存吗？`, `该动作会导致删除所有缓存数据`)
               queryClient.removeQueries()
-              Image.clearDiskCache()
-              Image.clearMemoryCache()
+              // Image.clearDiskCache()
+              // Image.clearMemoryCache()
 
               Toast.show({
                 type: 'success',

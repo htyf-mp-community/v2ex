@@ -1,8 +1,8 @@
-import { Feather } from '@expo/vector-icons'
+import Feather from 'react-native-vector-icons/Feather'
 import { DrawerActions } from '@react-navigation/native'
 import { InfiniteData } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
-import { findIndex, uniqBy } from 'lodash-es'
+import { findIndex, uniqBy } from 'lodash'
 import {
   ReactNode,
   RefObject,

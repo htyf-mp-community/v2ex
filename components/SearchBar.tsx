@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useAtomValue } from 'jotai'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash'
 import { forwardRef } from 'react'
 import {
   Pressable,

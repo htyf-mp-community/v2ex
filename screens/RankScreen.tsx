@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { findIndex } from 'lodash-es'
+import { findIndex } from 'lodash'
 import { memo, useCallback, useState } from 'react'
 import {
   FlatList,

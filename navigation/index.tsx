@@ -13,7 +13,7 @@ import {
   NativeStackNavigationOptions,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack'
-import * as SplashScreen from 'expo-splash-screen'
+// import * as SplashScreen from 'expo-splash-screen'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 import { Platform } from 'react-native'
@@ -95,12 +95,12 @@ export default function Navigation() {
 
   return (
     <NavigationContainer
+      independent
       ref={navigationRef}
-      linking={linking}
       theme={theme}
       onReady={async () => {
         await sleep(300)
-        await SplashScreen.hideAsync()
+        // await SplashScreen.hideAsync()
 
         if (Platform.OS === 'android') {
           setReadyAndroid(true)

@@ -1,7 +1,7 @@
 import { Cheerio, CheerioAPI, Element, load } from 'cheerio'
 import { decode } from 'js-base64'
-import { defaultTo, unescape } from 'lodash-es'
-import { isString } from 'twrnc/dist/esm/types'
+import { defaultTo, unescape } from 'lodash'
+// import { isString } from 'twrnc/dist/esm/types'
 
 import { blackListAtom } from '@/jotai/blackListAtom'
 import { RecentTopic } from '@/jotai/recentTopicsAtom'
@@ -152,7 +152,7 @@ export function parseTopic($: CheerioAPI): Omit<Topic, 'id'> {
   const opHrefs = $('.header .op')
     .map((_i, op) => $(op).attr('href'))
     .get()
-    .filter(isString)
+    // .filter(isString)
   const content = $('#Main .topic_content').html()!
 
   let views = 0

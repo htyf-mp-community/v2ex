@@ -1,5 +1,5 @@
 import { load } from 'cheerio'
-import { defaultTo } from 'lodash-es'
+import { defaultTo } from 'lodash'
 import { router } from 'react-query-kit'
 
 import { removeUnnecessaryPages } from '@/utils/query'

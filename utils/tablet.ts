@@ -1,4 +1,4 @@
-import * as Device from 'expo-device'
+// import * as Device from 'expo-device'
 import { useAtomValue } from 'jotai'
 import { Dimensions, Platform, useWindowDimensions } from 'react-native'
 
@@ -7,8 +7,8 @@ import { store } from '../jotai/store'
 
 export const isTablet = () =>
   Platform.OS === 'ios'
-    ? store.get(deviceTypeAtom) === Device.DeviceType.TABLET ||
-      store.get(deviceTypeAtom) === Device.DeviceType.DESKTOP
+    ? store.get(deviceTypeAtom) === 2 ||
+      store.get(deviceTypeAtom) === 3
     : Dimensions.get('window').width >= 768
 
 export const isLargeTablet = () =>

@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { compact, isEqual, isUndefined, maxBy } from 'lodash-es'
+import { compact, isEqual, isUndefined, maxBy } from 'lodash'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 

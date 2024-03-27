@@ -1,8 +1,10 @@
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { AntDesign, MaterialIcons } from '@expo/vector-icons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'
-import { compact } from 'lodash-es'
+import { compact } from 'lodash'
 import { Fragment, ReactNode, useState } from 'react'
 import {
   Platform,

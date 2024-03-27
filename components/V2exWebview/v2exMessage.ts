@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { noop, pick, uniqueId } from 'lodash-es'
+import { noop, pick, uniqueId } from 'lodash'
 
 import { sleep } from '@/utils/sleep'
 

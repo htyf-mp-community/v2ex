@@ -1,5 +1,5 @@
 import { load } from 'cheerio'
-import { compact, last } from 'lodash-es'
+import { compact, last } from 'lodash'
 import Toast from 'react-native-toast-message'
 import { inferData, router } from 'react-query-kit'
 

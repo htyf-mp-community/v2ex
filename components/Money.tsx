@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'lodash'
 import { Text, View, ViewStyle } from 'react-native'
 
 import { baseUrlAtom } from '@/jotai/baseUrlAtom'

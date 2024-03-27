@@ -1,8 +1,10 @@
 import { useActionSheet } from '@expo/react-native-action-sheet'
-import { Feather, FontAwesome5 } from '@expo/vector-icons'
+import Feather from 'react-native-vector-icons/Feather'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'
-import { compact, find, findIndex, isBoolean } from 'lodash-es'
+import { compact, find, findIndex, isBoolean } from 'lodash'
 import { Fragment, memo, useState } from 'react'
 import { Platform, Pressable, Share, Text, View, ViewProps } from 'react-native'
 import Toast from 'react-native-toast-message'

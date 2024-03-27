@@ -1,6 +1,6 @@
 import { Slider } from '@react-native-assets/slider'
 import { transparentize } from 'color2k'
-import { compact } from 'lodash-es'
+import { compact } from 'lodash'
 import { useMemo, useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

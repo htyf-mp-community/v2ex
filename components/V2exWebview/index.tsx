@@ -1,5 +1,5 @@
 import CookieManager from '@react-native-cookies/cookies'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash'
 import { useEffect, useReducer, useRef } from 'react'
 import { View } from 'react-native'
 import WebView from 'react-native-webview'

@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash'
 import { useCallback, useMemo } from 'react'
 import { FlatList, ListRenderItem, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

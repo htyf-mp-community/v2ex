@@ -5,7 +5,7 @@ import {
   hashKey,
   onlineManager,
 } from '@tanstack/react-query'
-import { first, isArray, isObjectLike } from 'lodash-es'
+import { first, isArray, isObjectLike } from 'lodash'
 import { useMemo } from 'react'
 import { AppState, Platform } from 'react-native'
 import { InfiniteQueryHook, Middleware, getKey } from 'react-query-kit'

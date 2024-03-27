@@ -1,4 +1,4 @@
-import { isPlainObject } from 'lodash-es'
+import { isPlainObject } from 'lodash'
 
 export function hasSize(
   style: any

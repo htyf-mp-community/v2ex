@@ -1,5 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash'
 import { forwardRef } from 'react'
 import { TextInput, TextInputProps, TextStyle } from 'react-native'
 

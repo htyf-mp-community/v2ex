@@ -1,7 +1,7 @@
 import { load } from 'cheerio'
 import hljs from 'highlight.js'
 import { useAtomValue } from 'jotai'
-import { some } from 'lodash-es'
+import { some } from 'lodash'
 import { useContext, useMemo } from 'react'
 import { ScrollView, View } from 'react-native'
 import RenderHTML, {

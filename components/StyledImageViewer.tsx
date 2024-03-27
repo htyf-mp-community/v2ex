@@ -1,9 +1,10 @@
-import { Ionicons } from '@expo/vector-icons'
-import { Image } from 'expo-image'
-import * as Sharing from 'expo-sharing'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+// import { Image } from 'expo-image'
+// import * as Sharing from 'expo-sharing'
 import { useAtomValue } from 'jotai'
 import { ComponentProps } from 'react'
-import { Modal, Text, View } from 'react-native'
+import { Image, Modal, Text, View } from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -55,7 +56,7 @@ export default function StyledImageViewer({
               activeColor="#fff"
               name="share-outline"
               onPress={() => {
-                Sharing.shareAsync(props.imageUrls[currentIndex!].url)
+                // Sharing.shareAsync(props.imageUrls[currentIndex!].url)
               }}
             />
           </View>

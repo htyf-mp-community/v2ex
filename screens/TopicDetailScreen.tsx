@@ -1,7 +1,9 @@
-import { Entypo, Feather } from '@expo/vector-icons'
+import Entypo from 'react-native-vector-icons/Entypo'
+import Feather from 'react-native-vector-icons/Feather'
+
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { useAtomValue } from 'jotai'
-import { last, uniqBy } from 'lodash-es'
+import { last, uniqBy } from 'lodash'
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import {
   Animated,

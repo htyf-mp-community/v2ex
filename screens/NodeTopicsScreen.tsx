@@ -1,9 +1,10 @@
-import { AntDesign } from '@expo/vector-icons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { darken, lighten } from 'color2k'
 import { produce } from 'immer'
 import { useAtomValue } from 'jotai'
-import { find, last, uniqBy } from 'lodash-es'
+import { find, last, uniqBy } from 'lodash'
 import { useCallback, useMemo, useRef } from 'react'
 import { Animated, ListRenderItem, Platform, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

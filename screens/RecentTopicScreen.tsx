@@ -1,5 +1,5 @@
 import { useAtom, useAtomValue } from 'jotai'
-import { compact, isString, last, pick, uniqBy, upperCase } from 'lodash-es'
+import { compact, isString, last, pick, uniqBy, upperCase } from 'lodash'
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { FlatList, ListRenderItem, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'

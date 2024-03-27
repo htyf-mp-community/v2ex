@@ -1,7 +1,7 @@
 import { load } from 'cheerio'
-import { Image } from 'expo-image'
+// import { Image } from 'expo-image'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { compact, findIndex, isString } from 'lodash-es'
+import { compact, findIndex, isString } from 'lodash'
 import { memo, useMemo } from 'react'
 import { Alert, Platform, Image as RNImage } from 'react-native'
 import RenderHtml, {
@@ -101,13 +101,13 @@ function Html({
                     let localUrl: string | null
 
                     if (Platform.OS === 'ios' || Platform.OS === 'macos') {
-                      localUrl = await Image.getCachePathAsync(resolvedURI)
+                      // localUrl = await Image.getCachePathAsync(resolvedURI)
 
-                      if (localUrl) {
-                        localUrl = RNImage.resolveAssetSource({
-                          uri: localUrl,
-                        }).uri
-                      }
+                      // if (localUrl) {
+                      //   localUrl = RNImage.resolveAssetSource({
+                      //     uri: localUrl,
+                      //   }).uri
+                      // }
                     }
 
                     return {

@@ -1,6 +1,6 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { parseToRgba } from 'color2k'
-import { Image, ImageBackground, ImageProps, ImageSource } from 'expo-image'
+// import { Image, ImageBackground, ImageProps, ImageSource } from 'expo-image'
 import { useAtomValue } from 'jotai'
 import {
   isArray,
@@ -10,9 +10,11 @@ import {
   memoize,
   pick,
   uniqueId,
-} from 'lodash-es'
+} from 'lodash'
 import { memo, useEffect, useState } from 'react'
 import {
+  Image,
+  ImageBackground,
   Pressable,
   StyleProp,
   TouchableOpacity,

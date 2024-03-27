@@ -1,5 +1,5 @@
 // import CookieManager from '@react-native-cookies/cookies'
-import { isArray, noop } from 'lodash-es'
+import { isArray, noop } from 'lodash'
 
 import { isExpoGo } from './isExpoGo'
 import { sleep } from './sleep'

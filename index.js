@@ -1,8 +1,19 @@
-import { registerRootComponent } from 'expo'
+import { AppRegistry } from 'react-native'
+import { useEffect } from 'react';
+import { MiniAppsEnginesProvider } from '@htyf-mp/engines'
+import App from './src'
 
-import App from './App'
+const Root = () => {
+  useEffect(() => {
+    return () => {
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App)
+    }
+  }, [])
+  return <App />
+}
+
+const Root2 = () => {
+  return <MiniAppsEnginesProvider><Root/></MiniAppsEnginesProvider>
+}
+
+AppRegistry.registerComponent('apps', () => Root2)

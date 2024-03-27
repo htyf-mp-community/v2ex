@@ -1,7 +1,7 @@
 import { RouteProp, useRoute } from '@react-navigation/native'
 import { darken, lighten } from 'color2k'
 import { useAtomValue } from 'jotai'
-import { every, findIndex, last, pick, some, uniqBy } from 'lodash-es'
+import { every, findIndex, last, pick, some, uniqBy } from 'lodash'
 import {
   Fragment,
   ReactNode,

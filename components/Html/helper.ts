@@ -1,5 +1,5 @@
 import * as Clipboard from 'expo-clipboard'
-import { first, isArray } from 'lodash-es'
+import { first, isArray } from 'lodash'
 import {
   HTMLContentModel,
   HTMLElementModel,

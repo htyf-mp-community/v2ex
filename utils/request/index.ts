@@ -2,10 +2,10 @@ import axios from 'axios'
 import { CheerioAPI, load } from 'cheerio'
 import dayjs from 'dayjs'
 import { RESET } from 'jotai/utils'
-import { isInteger, isObjectLike } from 'lodash-es'
-import { isEqual } from 'lodash-es'
+import { isInteger, isObjectLike } from 'lodash'
+import { isEqual } from 'lodash'
 import Toast from 'react-native-toast-message'
-import { isString } from 'twrnc/dist/esm/types'
+// import { isString } from 'twrnc/dist/esm/types'
 
 import { enabledMsgPushAtom } from '@/jotai/enabledMsgPushAtom'
 import { navNodesAtom } from '@/jotai/navNodesAtom'
@@ -51,7 +51,7 @@ request.interceptors.response.use(
         : new Error('Something went wrong')
     }
 
-    const $ = isString(data) ? load(data) : undefined
+    const $ = data ? load(data) : undefined
 
     // handle html error
     if ($) {

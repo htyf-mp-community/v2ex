@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
-import { findIndex } from 'lodash-es'
+import { findIndex } from 'lodash'
 import { memo, useCallback, useMemo, useState } from 'react'
 import {
   FlatList,

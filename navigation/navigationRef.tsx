@@ -3,7 +3,7 @@ import {
   createNavigationContainerRef,
 } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash'
 
 import { RootStackParamList } from '../types'
 
