@@ -2,19 +2,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { parseToRgba } from 'color2k'
 // import { Image, ImageBackground, ImageProps, ImageSource } from 'expo-image'
 import { useAtomValue } from 'jotai'
-import {
-  isArray,
-  isEqual,
-  isObject,
-  isString,
-  memoize,
-  pick,
-  uniqueId,
-} from 'lodash'
-import { memo, useEffect, useState } from 'react'
+import { isArray, isEqual, isObject, isString, memoize, pick } from 'lodash'
+import { memo, useEffect } from 'react'
 import {
   Image,
   ImageBackground,
+  ImageProps,
   Pressable,
   StyleProp,
   TouchableOpacity,
@@ -28,25 +21,28 @@ import { uiAtom } from '@/jotai/uiAtom'
 import { k } from '@/servicies'
 import { hasSize } from '@/utils/hasSize'
 import tw from '@/utils/tw'
-import { genBMPUri, isGifURL, isSvgURL, resolveURL } from '@/utils/url'
+import { genBMPUri, isSvgURL, resolveURL } from '@/utils/url'
+import useLatest from '@/utils/useLatest'
 import useUpdate from '@/utils/useUpdate'
 
 export interface StyledImageProps extends ImageProps {
   containerWidth?: number
 }
 
-type UriInfo = { width: number; height: number } | 'error' | 'refetching'
+type ImageResult =
+  | { width: number; height: number; isAnimated?: boolean }
+  | 'error'
+  | 'refetching'
 
-export const uriInfo = new Map<string | undefined, UriInfo>()
+export const imageResults = new Map<string | undefined, ImageResult>()
 const MAX_IMAGE_HEIGHT = 510
 const BROKEN_IMAGE_SIZE = 24
-
 const genPlaceholder = memoize((color: string) => {
   const [r, g, b, a = 1] = parseToRgba(color)
   return genBMPUri(1, [b, g, r, parseInt(String(a * 255), 10)])
 })
 
-function BaseImage({
+function ImageImpl({
   style,
   source,
   onLoad,
@@ -56,16 +52,17 @@ function BaseImage({
 }: StyledImageProps) {
   const { colors } = useAtomValue(uiAtom)
   const uri = (source as ImageSource).uri
-  const size = uriInfo.get(uri)
+  const result = imageResults.get(uri)
   const update = useUpdate()
+  const hasPassedSize = hasSize(style)
 
   if (!uri) return <View style={style} {...props} />
 
-  if (size === 'error') {
+  if (result === 'error') {
     return (
-      <BreakingImage
+      <BrokenImage
         onPress={() => {
-          uriInfo.set(uri, 'refetching')
+          imageResults.set(uri, 'refetching')
           update()
         }}
         style={style}
@@ -77,18 +74,18 @@ function BaseImage({
     ...props,
     source,
     onLoad: ev => {
-      const newSize = pick(ev.source, ['width', 'height'])
-      if (!isEqual(size, newSize)) {
-        uriInfo.set(uri, newSize)
-        if (!hasSize(style)) update()
+      const nextImageResult = pick(ev.source, ['width', 'height', 'isAnimated'])
+      if (!isEqual(result, nextImageResult)) {
+        imageResults.set(uri, nextImageResult)
+        if (!hasPassedSize) update()
       }
       onLoad?.(ev)
     },
     onError: err => {
       // TODO: This is a trick
       // Maybe fixed in next expo-image version
-      if (!hasSize(size)) {
-        uriInfo.set(uri, 'error')
+      if (!hasSize(result)) {
+        imageResults.set(uri, 'error')
         update()
       }
       onError?.(err)
@@ -97,15 +94,27 @@ function BaseImage({
     placeholderContentFit: 'cover',
     style: tw.style(
       // Compute image size if style has no size
-      !hasSize(style) && computeOptimalDispalySize(containerWidth, size),
+      !hasPassedSize && computeOptimalDispalySize(containerWidth, result),
       style as ViewStyle
     ),
   }
 
-  if (!hasSize(style) && isGifURL(uri)) {
+  if (props.autoplay === false) {
+    const isAnimating = isAnimatingImage(uri)
+
     return (
-      <ImageBackground {...imageProps}>
-        {!props.autoplay && size !== 'refetching' && <GifIcon />}
+      <ImageBackground
+        {...imageProps}
+        autoplay={isAnimating}
+        allowDownscaling={props.allowDownscaling ?? !isAnimating}
+      >
+        {isObject(result) && !!result?.isAnimated && (
+          <AnimatedImageOverlay
+            isAnimating={isAnimating}
+            update={update}
+            uri={uri}
+          />
+        )}
       </ImageBackground>
     )
   }
@@ -113,19 +122,69 @@ function BaseImage({
   return <Image {...imageProps} />
 }
 
-function GifIcon() {
+const animatedImageListeners = new Set<() => void>()
+let animatingImage = ''
+function isAnimatingImage(uri: string) {
+  return uri === animatingImage
+}
+export function setAnimatingImage(nextAnimatedImage: string) {
+  if (!isAnimatingImage(nextAnimatedImage)) {
+    animatingImage = nextAnimatedImage
+    animatedImageListeners.forEach(l => l())
+  }
+}
+
+function AnimatedImageOverlay({
+  update,
+  isAnimating,
+  uri,
+}: {
+  isAnimating: boolean
+  update: () => void
+  uri: string
+}) {
+  const isAnimatingRef = useLatest(isAnimating)
+
+  useEffect(() => {
+    const listener = () => {
+      if (isAnimatingImage(uri) !== isAnimatingRef.current) {
+        update()
+      }
+    }
+
+    animatedImageListeners.add(listener)
+    return () => {
+      animatedImageListeners.delete(listener)
+
+      if (!animatedImageListeners.size) {
+        animatingImage = ''
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uri])
+
   return (
-    <View
-      style={tw`absolute left-1 top-1 rounded p-0.5 bg-black bg-opacity-50`}
+    <Pressable
+      style={tw`absolute inset-0`}
+      onPress={() => {
+        setAnimatingImage(uri)
+      }}
+      disabled={isAnimating}
     >
-      <View style={tw`border-white border rounded px-1 py-0.5`}>
-        <Text style={tw`text-white font-bold text-[10px]`}>GIF</Text>
-      </View>
-    </View>
+      {!isAnimating && (
+        <View
+          style={tw`absolute left-1 top-1 rounded p-0.5 bg-black bg-opacity-50`}
+        >
+          <View style={tw`border-white border rounded px-1 py-0.5`}>
+            <Text style={tw`text-white font-bold text-[10px]`}>GIF</Text>
+          </View>
+        </View>
+      )}
+    </Pressable>
   )
 }
 
-function BreakingImage({
+function BrokenImage({
   onPress,
   style,
 }: {
@@ -154,53 +213,16 @@ function BreakingImage({
   )
 }
 
-const uniqueGIfId = () => uniqueId(`Gif_`)
-const gifListeners = new Set<() => void>()
-
-let activeGifId = ''
-export const setGifId = (nextGifId: string) => {
-  if (activeGifId !== nextGifId) {
-    activeGifId = nextGifId
-    gifListeners.forEach(l => l())
-  }
-}
-
-const Gif = (props: StyledImageProps) => {
-  const [gifId] = useState(uniqueGIfId)
-  const [autoplay, setAutoplay] = useState(false)
-
-  useEffect(() => {
-    const listener = () => {
-      setAutoplay(gifId === activeGifId)
-    }
-
-    gifListeners.add(listener)
-    return () => {
-      gifListeners.delete(listener)
-    }
-  }, [gifId])
-
-  return (
-    <Pressable
-      onPress={() => {
-        setGifId(gifId)
-      }}
-      disabled={autoplay}
-    >
-      <BaseImage {...props} autoplay={autoplay} />
-    </Pressable>
-  )
-}
-
-const Svg = ({
+function Svg({
   uri,
   style,
   containerWidth,
   ...props
-}: UriProps & { containerWidth?: number }) => {
+}: UriProps & { containerWidth?: number }) {
   const { colors } = useAtomValue(uiAtom)
+  const hasPassedSize = hasSize(style)
 
-  const svgQuery = k.other.svg.useQuery({
+  const svgQuery = k.other.svgXml.useQuery({
     variables: uri!,
   })
 
@@ -208,7 +230,7 @@ const Svg = ({
     return (
       <View
         style={tw.style(
-          !hasSize(style) &&
+          !hasPassedSize &&
             computeOptimalDispalySize(
               containerWidth,
               svgQuery.errorUpdateCount ? 'refetching' : undefined
@@ -221,17 +243,16 @@ const Svg = ({
   }
 
   if (!svgQuery.data) {
-    return <BreakingImage style={style} onPress={svgQuery.refetch} />
+    return <BrokenImage style={style} onPress={svgQuery.refetch} />
   }
-
-  const { xml, size } = svgQuery.data
 
   return (
     <SvgXml
       {...props}
-      xml={xml}
+      xml={svgQuery.data.xml}
       style={tw.style(
-        computeOptimalDispalySize(containerWidth, size),
+        !hasPassedSize &&
+          computeOptimalDispalySize(containerWidth, svgQuery.data),
         style as any
       )}
       width="100%"
@@ -241,7 +262,7 @@ const Svg = ({
 
 function computeOptimalDispalySize(
   containerWidth?: number,
-  size?: UriInfo
+  size?: ImageResult
 ): ViewStyle {
   if (size === 'refetching' || size === 'error') {
     return {
@@ -264,7 +285,7 @@ function computeOptimalDispalySize(
 
   // Display mini image
   if (width <= 200 && height <= 200) {
-    return size
+    return { width, height }
   }
 
   const aspectRatio = width / height
@@ -282,7 +303,7 @@ function computeOptimalDispalySize(
     width <= Math.min(MAX_IMAGE_HEIGHT, containerWidth) &&
     height <= MAX_IMAGE_HEIGHT
   ) {
-    return size
+    return { width, height }
   }
 
   // Display optimal size
@@ -310,25 +331,8 @@ function StyledImage({ source, ...props }: StyledImageProps) {
     return <Svg uri={resolvedURI} {...(props as any)} />
   }
 
-  if (
-    isString(resolvedURI) &&
-    isGifURL(resolvedURI) &&
-    !hasSize(props.style) &&
-    !props.autoplay
-  ) {
-    return (
-      <Gif
-        {...props}
-        source={{
-          ...(isObject(source) && !isArray(source) && source),
-          uri: resolvedURI,
-        }}
-      />
-    )
-  }
-
   return (
-    <BaseImage
+    <ImageImpl
       {...props}
       source={{
         ...(isObject(source) && !isArray(source) && source),

@@ -13,7 +13,7 @@ import tw from '@/utils/tw'
 
 import IconButton from './IconButton'
 import { NAV_BAR_HEIGHT } from './NavBar'
-import { setGifId } from './StyledImage'
+import { setAnimatingImage } from './StyledImage'
 
 export interface StyledImageViewerProps
   extends Omit<ComponentProps<typeof ImageViewer>, 'onCancel'> {
@@ -29,7 +29,7 @@ export default function StyledImageViewer({
   const { fontSize } = useAtomValue(uiAtom)
 
   const handleClose = () => {
-    setGifId('')
+    setAnimatingImage('')
     props.onClose?.()
   }
 
@@ -71,7 +71,7 @@ export default function StyledImageViewer({
           </View>
         )}
         renderImage={imageProps => {
-          return <Image {...imageProps} autoplay />
+          return <Image {...imageProps} allowDownscaling={false} />
         }}
         saveToLocalByLongPress={false}
         {...props}
