@@ -88,7 +88,7 @@ function SettingScreen() {
             <Text
               style={tw`text-[${colors.foreground}] ${fontSize.large} font-semibold`}
             >
-              V2EX
+              V2EX(v{__APP_DEFINE_VERSION__})
             </Text>
             <Text
               style={tw`text-[${colors.foreground}] ${fontSize.medium} mt-1`}

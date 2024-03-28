@@ -47,6 +47,7 @@ LogBox.ignoreLogs([
 export default function App() {
 
   useEffect(() => {
+    
     Alert.alert('提示', '为了你能正常使用,请科学上网！',  [{ text: '知道了', onPress: () => {
       StatusBar.setHidden(false, 'fade')
     } }],)

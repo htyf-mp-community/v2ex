@@ -53,7 +53,7 @@ export default function NavBar({
           style
         ),
         {
-          marginTop: -4,
+          marginTop: -3.5,
           paddingRight: 102
         }
       ]}
