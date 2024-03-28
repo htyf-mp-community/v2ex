@@ -40,7 +40,7 @@ export default function StyledBlurView(props: BlurViewProps) {
     return (
       <BlurView
         {...props}
-        tint={colorScheme}
+        blurType={colorScheme}
         style={tw.style(
           `bg-[${formatColor(transparentize(colors.base100, 0.35))}]`,
           props.style as any
