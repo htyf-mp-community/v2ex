@@ -13,6 +13,8 @@ import { useStatusBarStyle } from '@/utils/useStatusBarStyle'
 import IconButton from './IconButton'
 import { supportsBlurviewColors } from './StyledBlurView'
 
+import jssdk from '@htyf-mp/js-sdk'
+
 export const NAV_BAR_HEIGHT = 53
 
 export default function NavBar({
@@ -38,16 +40,23 @@ export default function NavBar({
 
   const safeTop = useNavBarSafeTop(hideSafeTop)
   const { colors, fontSize } = useAtomValue(uiAtom)
+  const menuBtn = jssdk.getMenuButtonBoundingClientRect()
 
   return (
     <View
-      style={tw.style(
-        `pt-[${safeTop}px`,
-        (Platform.OS === 'android' ||
-          !supportsBlurviewColors.includes(colors.base100)) &&
-          `border-[${colors.divider}] border-solid border-b`,
-        style
-      )}
+      style={[
+        tw.style(
+          `pt-[${safeTop}px`,
+          (Platform.OS === 'android' ||
+            !supportsBlurviewColors.includes(colors.base100)) &&
+            `border-[${colors.divider}] border-solid border-b`,
+          style
+        ),
+        {
+          marginTop: -5,
+          paddingRight: 102
+        }
+      ]}
     >
       <View style={tw`px-4 flex-row items-center h-[${NAV_BAR_HEIGHT}px]`}>
         {!!left && (

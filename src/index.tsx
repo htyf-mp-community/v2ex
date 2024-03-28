@@ -5,8 +5,8 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
 import { Provider, useAtom, useAtomValue } from 'jotai'
 import { waitForAll } from 'jotai/utils'
-import { ReactElement, ReactNode, Suspense } from 'react'
-import { LogBox } from 'react-native'
+import { ReactElement, ReactNode, Suspense, useEffect } from 'react'
+import { Alert, LogBox } from 'react-native'
 import 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDeviceContext } from 'twrnc'
@@ -45,6 +45,11 @@ LogBox.ignoreLogs([
 // enabledNetworkInspect()
 
 export default function App() {
+
+  useEffect(() => {
+    Alert.alert('提示', '为了你能正常使用,请科学上网！',  [{ text: '知道了' }],)
+  }, [])
+
   return (
     <ActionSheetProvider>
       <Provider unstable_createStore={() => store}>
