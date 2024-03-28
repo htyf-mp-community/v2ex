@@ -60,7 +60,7 @@ export default function StyledToast() {
   return (
     <Toast
       config={toastConfig}
-      topOffset={Math.max(40, safeAreaInsets.top + 8)}
+      topOffset={Math.max(40 + 50, safeAreaInsets.top + 8 + 50)}
     />
   )
 }

@@ -15,8 +15,8 @@ import {
 } from '@react-navigation/native-stack'
 // import * as SplashScreen from 'expo-splash-screen'
 import { useAtomValue } from 'jotai'
-import { useMemo, useState } from 'react'
-import { Platform } from 'react-native'
+import { useEffect, useMemo, useState } from 'react'
+import { Platform, StatusBar } from 'react-native'
 
 import PageLayout from '@/components/PageLayout'
 import Profile from '@/components/Profile'
@@ -59,10 +59,23 @@ import { useNavigationBar } from '@/utils/useNavigationBar'
 
 import linking from './LinkingConfiguration'
 import { navigationRef } from './navigationRef'
+import Toast from 'react-native-toast-message'
 
 export default function Navigation() {
   const colorScheme = useAtomValue(colorSchemeAtom)
   const { colors } = useAtomValue(uiAtom)
+
+  useEffect(() => {
+    Toast.show({
+      type: 'error',
+      text1: `提示`,
+      text2: `为了你能正常使用,请使用科学上网！`,
+      position: 'top',
+      visibilityTime: 6000,
+    })
+    StatusBar.setHidden(false, 'fade')
+  }, [])
+  
 
   const theme = useMemo(() => {
     const themeColors = {
