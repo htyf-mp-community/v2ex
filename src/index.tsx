@@ -2,11 +2,11 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 // import { enabledNetworkInspect } from './utils/enabledNetworkInspect'
 // import * as SplashScreen from 'expo-splash-screen'
-import { StatusBar } from 'expo-status-bar'
+// import { StatusBar } from 'expo-status-bar'
 import { Provider, useAtom, useAtomValue } from 'jotai'
 import { waitForAll } from 'jotai/utils'
 import { ReactElement, ReactNode, Suspense, useEffect } from 'react'
-import { Alert, LogBox } from 'react-native'
+import { Alert, LogBox, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useDeviceContext } from 'twrnc'
@@ -47,7 +47,9 @@ LogBox.ignoreLogs([
 export default function App() {
 
   useEffect(() => {
-    Alert.alert('提示', '为了你能正常使用,请科学上网！',  [{ text: '知道了' }],)
+    Alert.alert('提示', '为了你能正常使用,请科学上网！',  [{ text: '知道了', onPress: () => {
+      StatusBar.setHidden(false, 'fade')
+    } }],)
   }, [])
 
   return (
@@ -59,7 +61,7 @@ export default function App() {
               <AsyncStoragePersist>
                 <AppInitializer>
                   <Navigation />
-                  <StatusBar />
+                  {/* <StatusBar /> */}
                   <GlobalImageViewer />
                   <StyledToast />
                 </AppInitializer>
