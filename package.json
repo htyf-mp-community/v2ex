@@ -1,6 +1,6 @@
 {
   "name": "v2ex",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "index.js",
   "scripts": {
     "run:scripts": "node ./scripts/index.js",
@@ -34,7 +34,7 @@
     "@hongtangyun/react-native-utils": "0.1.2",
     "@hookform/resolvers": "2.9.10",
     "@hromovp/react-native-static-server": "0.5.5",
-    "@htyf-mp/engines": "0.0.32",
+    "@htyf-mp/engines": "0.0.38",
     "@htyf-mp/js-sdk": "0.0.10",
     "@miblanchard/react-native-slider": "2.6.0",
     "@native-base/icons": "0.0.11",
