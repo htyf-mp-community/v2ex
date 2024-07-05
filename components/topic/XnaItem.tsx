@@ -1,46 +1,43 @@
 import { useAtomValue } from 'jotai'
-import { compact, isEqual, isUndefined, maxBy } from 'lodash'
+import { compact, isEqual } from 'lodash'
 import { memo } from 'react'
 import { Text, View } from 'react-native'
 
 import { uiAtom } from '@/jotai/uiAtom'
 import { getCurrentRouteName, navigation } from '@/navigation/navigationRef'
-import { Topic, k } from '@/servicies'
+import { Xna } from '@/servicies'
 import { isTablet } from '@/utils/tablet'
 import tw from '@/utils/tw'
-import { useQueryData } from '@/utils/useQueryData'
+import useUpdate from '@/utils/useUpdate'
 
 import DebouncedPressable from '../DebouncedPressable'
 import Separator from '../Separator'
 import StyledButton from '../StyledButton'
 import StyledImage from '../StyledImage'
 
-export interface TopicItemProps {
-  topic: Topic
+export interface XnaItemProps {
+  xna: Xna
   hideAvatar?: boolean
 }
 
-export default memo(TopicItem, (prev, next) => isEqual(prev.topic, next.topic))
+export default memo(XnaItem, (prev, next) => isEqual(prev.xna, next.xna))
 
-function TopicItem({ topic, hideAvatar }: TopicItemProps) {
-  const isReaded = useQueryData(
-    k.topic.detail.getKey({ id: topic.id }),
-    data => {
-      if (isUndefined(data)) return false
-      const replyCount = maxBy(data.pages, 'reply_count')?.reply_count || 0
-      return replyCount >= topic.reply_count
-    }
-  )
+const readedXnaMap = new Map<string, boolean>()
+
+function XnaItem({ xna, hideAvatar }: XnaItemProps) {
+  const update = useUpdate()
   const { colors, fontSize } = useAtomValue(uiAtom)
 
   return (
     <DebouncedPressable
       style={tw`px-4 py-3 flex-row bg-[${colors.base100}]`}
       onPress={() => {
-        if (isTablet() && getCurrentRouteName() === 'TopicDetail') {
-          navigation.replace('TopicDetail', topic)
+        readedXnaMap.set(xna.id, true)
+        update()
+        if (isTablet() && getCurrentRouteName() === 'Webview') {
+          navigation.replace('Webview', { url: xna.id })
         } else {
-          navigation.push('TopicDetail', topic)
+          navigation.push('Webview', { url: xna.id })
         }
       }}
     >
@@ -49,14 +46,14 @@ function TopicItem({ topic, hideAvatar }: TopicItemProps) {
           <DebouncedPressable
             onPress={() => {
               navigation.push('MemberDetail', {
-                username: topic.member?.username!,
+                username: xna.member?.username!,
               })
             }}
             style={tw`pr-3`}
           >
             <StyledImage
               style={tw`w-6 h-6 rounded-full`}
-              source={topic.member?.avatar}
+              source={xna.member?.avatar}
               priority="high"
             />
           </DebouncedPressable>
@@ -69,30 +66,30 @@ function TopicItem({ topic, hideAvatar }: TopicItemProps) {
             numberOfLines={1}
             onPress={() => {
               navigation.push('MemberDetail', {
-                username: topic.member?.username!,
+                username: xna.member?.username!,
               })
             }}
           >
-            {topic.member?.username}
+            {xna.member?.username}
           </Text>
 
-          {!!topic.node?.title && (
+          {!!xna.node?.title && (
             <StyledButton
               size="mini"
               type="tag"
               onPress={() => {
-                if (isTablet() && getCurrentRouteName() === 'NodeTopics') {
-                  navigation.replace('NodeTopics', { name: topic.node?.name! })
+                if (isTablet() && getCurrentRouteName() === 'Webview') {
+                  navigation.replace('Webview', { url: xna.node?.name! })
                 } else {
-                  navigation.push('NodeTopics', { name: topic.node?.name! })
+                  navigation.push('Webview', { url: xna.node?.name! })
                 }
               }}
             >
-              {topic.node?.title}
+              {xna.node?.title}
             </StyledButton>
           )}
 
-          {topic.pin_to_top && (
+          {xna.pin_to_top && (
             <StyledButton size="mini" color={colors.danger} type="tag" ghost>
               置顶
             </StyledButton>
@@ -102,39 +99,23 @@ function TopicItem({ topic, hideAvatar }: TopicItemProps) {
         <Text
           style={tw.style(
             `${fontSize.medium} pt-1 font-medium`,
-            isReaded
+            readedXnaMap.has(xna.id)
               ? `text-[${colors.default}]`
               : `text-[${colors.foreground}]`
           )}
         >
-          {topic.title}
+          {xna.title}
         </Text>
 
         <Separator style={tw`mt-1`}>
           {compact([
-            !!topic.votes && (
-              <Text
-                key="votes"
-                style={tw`text-[${colors.default}] ${fontSize.small}`}
-              >
-                {`${topic.votes} 赞同`}
-              </Text>
-            ),
-            !!topic.reply_count && (
-              <Text
-                key="replies"
-                style={tw`text-[${colors.default}] ${fontSize.small}`}
-              >
-                {`${topic.reply_count} 回复`}
-              </Text>
-            ),
             <Text
               key="last_touched"
               style={tw`text-[${colors.default}] ${fontSize.small}`}
             >
-              {topic.last_touched}
+              {xna.last_touched}
             </Text>,
-            !!topic.last_reply_by && (
+            !!xna.last_reply_by && (
               <Text
                 key="last_reply_by"
                 style={tw`text-[${colors.foreground}] ${fontSize.small} flex-1`}
@@ -143,7 +124,7 @@ function TopicItem({ topic, hideAvatar }: TopicItemProps) {
                 <Text style={tw`text-[${colors.default}] ${fontSize.small}`}>
                   最后回复于
                 </Text>
-                {topic.last_reply_by}
+                {xna.last_reply_by}
               </Text>
             ),
           ])}

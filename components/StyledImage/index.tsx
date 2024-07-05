@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from 'lodash-es'
+import { isArray, isObject, isString } from 'lodash'
 import { memo } from 'react'
 
 import { isSvgURL, resolveURL } from '@/utils/url'

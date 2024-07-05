@@ -1,7 +1,7 @@
 import { parseToRgba } from 'color2k'
 import { Image, ImageBackground, ImageProps, ImageSource } from 'expo-image'
 import { useAtomValue } from 'jotai'
-import { isEqual, isObject, memoize, pick } from 'lodash-es'
+import { isEqual, isObject, memoize, pick } from 'lodash'
 import { View, ViewStyle } from 'react-native'
 
 import { uiAtom } from '@/jotai/uiAtom'
@@ -41,7 +41,12 @@ export function BaseImage({
     ...props,
     source,
     onLoad: ev => {
-      const nextImageResult = pick(ev.source, ['width', 'height', 'isAnimated'])
+      const nextImageResult = pick(ev.source, [
+        'width',
+        'height',
+        'isAnimated',
+        'mediaType',
+      ])
       if (!isEqual(result, nextImageResult)) {
         imageResults.set(uri, nextImageResult)
         if (!hasPassedSize) update()
@@ -82,6 +87,8 @@ export function BaseImage({
 
   if (props.autoplay === false) {
     const isAnimating = isAnimatingImage(uri)
+    const isMiniImage =
+      isObject(result) && result.width < 50 && result.height < 50
 
     return (
       <ImageBackground
@@ -89,13 +96,16 @@ export function BaseImage({
         autoplay={isAnimating}
         allowDownscaling={props.allowDownscaling ?? !isAnimating}
       >
-        {isObject(result) && !!result?.isAnimated && (
-          <AnimatedImageOverlay
-            isAnimating={isAnimating}
-            update={update}
-            uri={uri}
-          />
-        )}
+        {isObject(result) &&
+          !isMiniImage &&
+          !!result?.isAnimated &&
+          result?.mediaType === 'image/gif' && (
+            <AnimatedImageOverlay
+              isAnimating={isAnimating}
+              update={update}
+              uri={uri}
+            />
+          )}
       </ImageBackground>
     )
   }

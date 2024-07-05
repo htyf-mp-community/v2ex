@@ -11,17 +11,11 @@ export const isTablet = () =>
       store.get(deviceTypeAtom) === 3
     : Dimensions.get('window').width >= 768
 
-export const isLargeTablet = () =>
-  isTablet() && Dimensions.get('window').width >= 900
-
-export const useIsTablet = () => {
+export const useTablet = () => {
   useAtomValue(deviceTypeAtom)
-  useWindowDimensions()
-  return isTablet()
-}
-
-export const useIsLargeTablet = () => {
-  useAtomValue(deviceTypeAtom)
-  useWindowDimensions()
-  return isLargeTablet()
+  const { width } = useWindowDimensions()
+  return {
+    navbarWidth: isTablet() ? Math.min(Math.floor((3 / 7) * width), 460) : 0,
+    isTablet: isTablet(),
+  }
 }

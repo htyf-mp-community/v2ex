@@ -1,5 +1,5 @@
-import Feather from 'react-native-vector-icons/Feather'
-import { DrawerActions } from '@react-navigation/native'
+import { Feather } from '@expo/vector-icons'
+import { DrawerActions, useNavigation } from '@react-navigation/native'
 import { InfiniteData } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { findIndex, uniqBy } from 'lodash'
@@ -43,21 +43,26 @@ import StyledImage from '@/components/StyledImage'
 import StyledRefreshControl from '@/components/StyledRefreshControl'
 import TopicPlaceholder from '@/components/placeholder/TopicPlaceholder'
 import TopicItem from '@/components/topic/TopicItem'
-import { homeTabIndexAtom, homeTabsAtom } from '@/jotai/homeTabsAtom'
+import XnaItem from '@/components/topic/XnaItem'
+import {
+  RECENT_TAB_KEY,
+  XNA_KEY,
+  homeTabIndexAtom,
+  homeTabsAtom,
+} from '@/jotai/homeTabsAtom'
 import { profileAtom } from '@/jotai/profileAtom'
 import { store } from '@/jotai/store'
 import { colorSchemeAtom } from '@/jotai/themeAtom'
 import { fontScaleAtom, uiAtom } from '@/jotai/uiAtom'
 import { getCurrentRouteName, navigation } from '@/navigation/navigationRef'
-import { Topic, k } from '@/servicies'
+import { Topic, Xna, k } from '@/servicies'
 import { isSignined } from '@/utils/authentication'
 import { queryClient } from '@/utils/query'
-import { isLargeTablet, useIsTablet } from '@/utils/tablet'
+import { isTablet } from '@/utils/tablet'
 import tw from '@/utils/tw'
 import { useRefreshByUser } from '@/utils/useRefreshByUser'
 
 const TAB_BAR_HEIGHT = 40
-const RECENT_TAB_KEY = 'recent'
 const errorResetMap: Record<string, () => void> = {}
 
 function TabPlaceholder({
@@ -112,8 +117,10 @@ function HomeScreen() {
     const activeQueryKey: any =
       activeTab.type === 'node'
         ? k.node.topics.getKey({ name: activeTabKey })
-        : activeTabKey === RECENT_TAB_KEY
+        : activeTab.type === 'recent'
         ? k.topic.recent.getKey()
+        : activeTab.type === 'xna'
+        ? k.topic.xna.getKey()
         : k.topic.tab.getKey({ tab: activeTabKey })
     const query = queryClient.getQueryCache().find({
       queryKey: activeQueryKey,
@@ -122,7 +129,11 @@ function HomeScreen() {
     if (query?.state.error) {
       errorResetMap[activeTabKey]?.()
     } else if (query?.getObserversCount() && (forceFetch || query?.isStale())) {
-      if (activeTab.type === 'node' || activeTabKey === RECENT_TAB_KEY) {
+      if (
+        activeTab.type === 'node' ||
+        activeTab.type === 'recent' ||
+        activeTab.type === 'xna'
+      ) {
         const pages =
           (queryClient.getQueryData(activeQueryKey) as InfiniteData<any, any>)
             ?.pages?.length || 0
@@ -136,6 +147,8 @@ function HomeScreen() {
         queryClient.prefetchInfiniteQuery({
           ...(activeTab.type === 'node'
             ? k.node.topics.getFetchOptions({ name: activeTabKey })
+            : activeTab.type === 'xna'
+            ? (k.topic.xna.getFetchOptions() as any)
             : k.topic.recent.getFetchOptions()),
           pages: 1,
         })
@@ -178,10 +191,18 @@ function HomeScreen() {
             )
           }
 
-          if (route.key === RECENT_TAB_KEY) {
+          if (route.type === RECENT_TAB_KEY) {
             return (
               <TabPlaceholder tab={RECENT_TAB_KEY}>
                 <RecentTopics ref={ref} headerHeight={headerHeight} />
+              </TabPlaceholder>
+            )
+          }
+
+          if (route.type === XNA_KEY) {
+            return (
+              <TabPlaceholder tab={XNA_KEY}>
+                <Xnas ref={ref} headerHeight={headerHeight} />
               </TabPlaceholder>
             )
           }
@@ -455,38 +476,100 @@ const NodeTopics = memo(
   })
 )
 
+const Xnas = memo(
+  forwardRef<FlatList, { headerHeight: number }>(({ headerHeight }, ref) => {
+    const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isFetching } =
+      k.topic.xna.useSuspenseInfiniteQuery({
+        refetchOnWindowFocus: () => isRefetchOnWindowFocus(XNA_KEY),
+      })
+
+    const { isRefetchingByUser, refetchByUser } = useRefreshByUser(() =>
+      queryClient.prefetchInfiniteQuery({
+        ...k.topic.recent.getFetchOptions(),
+        pages: 1,
+      })
+    )
+
+    const renderItem: ListRenderItem<Xna> = useCallback(
+      ({ item }) => <XnaItem key={item.id} xna={item} />,
+      []
+    )
+
+    const flatedData = useMemo(
+      () => uniqBy(data.pages.map(page => page.list).flat(), 'id'),
+      [data.pages]
+    )
+
+    return (
+      <RefetchingIndicator
+        isRefetching={isFetching && !isRefetchingByUser && !isFetchingNextPage}
+        progressViewOffset={headerHeight}
+      >
+        <FlatList
+          ref={ref}
+          data={flatedData}
+          automaticallyAdjustsScrollIndicatorInsets={false}
+          refreshControl={
+            <StyledRefreshControl
+              refreshing={isRefetchingByUser}
+              onRefresh={refetchByUser}
+              progressViewOffset={headerHeight}
+            />
+          }
+          contentContainerStyle={{
+            paddingTop: headerHeight,
+          }}
+          ItemSeparatorComponent={LineSeparator}
+          renderItem={renderItem}
+          onEndReached={() => {
+            if (hasNextPage) {
+              fetchNextPage()
+            }
+          }}
+          onEndReachedThreshold={0.3}
+          ListFooterComponent={
+            <SafeAreaView edges={['bottom']}>
+              {isFetchingNextPage ? (
+                <StyledActivityIndicator style={tw`py-4`} />
+              ) : null}
+            </SafeAreaView>
+          }
+        />
+      </RefetchingIndicator>
+    )
+  })
+)
+
 function TopNavBar() {
   const profile = useAtomValue(profileAtom)
 
-  const isTablet = useIsTablet()
-
   const { colors } = useAtomValue(uiAtom)
+
+  const nav = useNavigation()
 
   return (
     <NavBar
       style={tw`border-b-0`}
       left={
-        !isTablet && (
-          <Pressable
-            onPress={() => {
-              navigation.dispatch(DrawerActions.openDrawer)
-            }}
-          >
-            {profile ? (
-              <Badge content={profile.my_notification}>
-                <StyledImage
-                  priority="high"
-                  style={tw`w-8 h-8 rounded-full`}
-                  source={profile.avatar}
-                />
-              </Badge>
-            ) : (
-              <View
-                style={tw`w-8 h-8 items-center justify-center rounded-full bg-[${colors.neutral}]`}
+        <Pressable
+          onPress={() => {
+            nav.dispatch(DrawerActions.openDrawer)
+          }}
+        >
+          {profile ? (
+            <Badge content={profile.my_notification}>
+              <StyledImage
+                priority="high"
+                style={tw`w-8 h-8 rounded-full`}
+                source={profile.avatar}
               />
-            )}
-          </Pressable>
-        )
+            </Badge>
+          ) : (
+            <View
+              style={tw`w-8 h-8 items-center justify-center rounded-full bg-[${colors.neutral}]`}
+            />
+          )}
+        </Pressable>
       }
       right={
         <IconButton
@@ -524,5 +607,5 @@ function PreventLeftSwiping({ headerHeight }: { headerHeight: number }) {
 function isRefetchOnWindowFocus(key: string) {
   const isActive =
     findIndex(store.get(homeTabsAtom), { key }) === store.get(homeTabIndexAtom)
-  return isActive && (getCurrentRouteName() === 'Home' || isLargeTablet())
+  return isActive && (getCurrentRouteName() === 'Home' || isTablet())
 }
