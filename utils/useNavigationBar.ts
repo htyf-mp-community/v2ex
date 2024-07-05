@@ -1,4 +1,4 @@
-import * as NavigationBar from 'expo-navigation-bar'
+// import * as NavigationBar from 'expo-navigation-bar'
 import { useAtomValue } from 'jotai'
 import { useLayoutEffect } from 'react'
 import { AppState } from 'react-native'
@@ -18,21 +18,21 @@ export function useNavigationBar(readyAndroid: boolean) {
 
     const change = () => {
       // https://github.com/facebook/react-native/issues/38152#issuecomment-1649452526
-      NavigationBar.setPositionAsync('relative')
-      NavigationBar.setBorderColorAsync(`transparent`)
-      NavigationBar.setBackgroundColorAsync(colors.base100)
-      NavigationBar.setButtonStyleAsync(
-        colorScheme === 'dark' ? 'light' : 'dark'
-      )
+      // NavigationBar.setPositionAsync('relative')
+      // NavigationBar.setBorderColorAsync(`transparent`)
+      // NavigationBar.setBackgroundColorAsync(colors.base100)
+      // NavigationBar.setButtonStyleAsync(
+      //   colorScheme === 'dark' ? 'light' : 'dark'
+      // )
     }
     change()
 
     const handleChange = async () => {
-      const changed =
-        colors.base100 !== (await NavigationBar.getBackgroundColorAsync())
-      if (changed) {
-        sleep(100).then(change)
-      }
+      // const changed =
+      //   colors.base100 !== (await NavigationBar.getBackgroundColorAsync())
+      // if (changed) {
+      //   sleep(100).then(change)
+      // }
     }
 
     const l1 = AppState.addEventListener('change', handleChange)
