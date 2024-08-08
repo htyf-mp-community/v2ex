@@ -2803,10 +2803,10 @@
   resolved "https://registry.yarnpkg.com/@hromovp/react-native-static-server/-/react-native-static-server-0.5.5.tgz#c8ae66e4b6a5729a34de97bd17c216b81018842b"
   integrity sha512-0edx/cwOU9+Nd7Owz+qjfV/L7ImFneHw7DiBdYBL39Ffxkcij1qnwRyLm4AdqL+/xV+25AUfAlz9t4y/u+N9Zw==
 
-"@htyf-mp/engines@0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@htyf-mp/engines/-/engines-0.3.4.tgz#452c2f72d8b124ab92b10b7a8de75cb49a90f1c1"
-  integrity sha512-6uSuYL7TBN2Oiu7GRm6A5wZErH8HnRjr2KLT5dRQq4YbLYVBdY2unM06zyqMGJ1/vgFqDv5bhtKCoR6ppxK1vQ==
+"@htyf-mp/engines@0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@htyf-mp/engines/-/engines-0.3.6.tgz#779d64681c772a672a91af1b41a4aa185640d3a9"
+  integrity sha512-gfn9rr/ddpmTKQims8ENzmwb7gHc8Tfx+VkYs8RSB8fd35xS1RLKcyYVB1ZtyPLdVWXZRJSrKS8XojX9QwY8Qg==
   dependencies:
     "@callstack/repack" "^3.7.0"
     "@gorhom/bottom-sheet" "^4.6.0"
@@ -2815,7 +2815,7 @@
     "@react-native-community/hooks" "^3.0.0"
     "@react-native-segmented-control/segmented-control" "^2.5.0"
     "@types/uuid" "^9.0.8"
-    adm-zip "^0.5.10"
+    adm-zip "0.5.10"
     babel-plugin-transform-remove-debugger "^6.9.4"
     dayjs "^1.11.10"
     delay "5"
@@ -6838,10 +6838,10 @@ acorn@^8.8.2:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.12.0.tgz#1627bfa2e058148036133b8d9b51a700663c294c"
   integrity sha512-RTvkC4w+KNXrM39/lWCUaG0IbRkWdCv7W/IOW9oU6SawyxulvkQy5HQPVTKxEjczcUvapcrw3cFx/60VN/NRNw==
 
-adm-zip@^0.5.10:
-  version "0.5.12"
-  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.12.tgz#87786328e91d54b37358d8a50f954c4cd73ba60b"
-  integrity sha512-6TVU49mK6KZb4qG6xWaaM4C7sA/sgUMLy/JYMOzkcp3BvVLpW0fXDFQiIzAuxFCt/2+xD7fNIiPFAoLZPhVNLQ==
+adm-zip@0.5.10:
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.5.10.tgz#4a51d5ab544b1f5ce51e1b9043139b639afff45b"
+  integrity sha512-x0HvcHqVJNTPk/Bw8JbLWlWoo6Wwnsug0fnYYro1HBrjxZ3G7/AZk7Ahv8JwDe1uIcz8eBqvu86FuF1POiG7vQ==
 
 agent-base@6:
   version "6.0.2"
